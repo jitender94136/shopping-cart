@@ -3,7 +3,7 @@ const app = express();
 const config = require('./shared/config/config.js');
 const port = config.port;
 const bodyParser = require('body-parser');
-
+const use = require('./users/routes.config');
 app.use(function (request, response, next) {
     request.header('Access-Control-Allow-Origin', '*');
     request.header('Access-Control-Allow-Credentials', 'true');
