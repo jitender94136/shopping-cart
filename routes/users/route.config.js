@@ -24,21 +24,21 @@ exports.routesConfig = function (app) {
     // list all users
     app.get('/users', [
         ValidationMiddleware.isValidJWT,
-        PermissionMiddleware.testMinimumPermissionLevel(ADMIN),
+        PermissionMiddleware.testMinimumPrivilige(ADMIN),
         UsersController.list
     ]);
 
     // get user data by user id
     app.get('/users/:userId', [
         ValidationMiddleware.isValidJWT,
-        PermissionMiddleware.onlyCustomerOrAdminCanDoThisAction,
+        PermissionMiddleware.onlyForUserOrAdmin,
         UsersController.getById
     ]);
 
     // partial data update
     app.patch('/users/:userId', [
         ValidationMiddleware.isValidJWT,
-        PermissionMiddleware.onlyCustomerOrAdminCanDoThisAction,
+        PermissionMiddleware.onlyForUserOrAdmin,
         UsersController.patchById
     ]);
 };

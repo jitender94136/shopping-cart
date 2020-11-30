@@ -1,10 +1,10 @@
 const config = require('../../shared/config')
 const ADMIN_PERMISSION = config.role.ADMIN;
 
-exports.testMinimumPermissionLevel = (required_permission_level) => {
+exports.testMinimumPrivilige = (required_permission_level) => {
     return (req, res, next) => {
         let user_permission_level = parseInt(req.jwt.role);
-        if (user_permission_level == required_permission_level) {
+        if (user_permission_level >= required_permission_level) {
             return next();
         } else {
             return res.status(403).send();
@@ -12,7 +12,7 @@ exports.testMinimumPermissionLevel = (required_permission_level) => {
     };
 };
 
-exports.onlyCustomerOrAdminCanDoThisAction = (req, res, next) => {
+exports.onlyForUserOrAdmin = (req, res, next) => {
     let user_permission_level = parseInt(req.jwt.role);
     let userId = req.jwt.userId;
     if (req.params && req.params.userId && userId === req.params.userId) {
