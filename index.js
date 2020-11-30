@@ -3,8 +3,9 @@ const app = express();
 const config = require('./shared/config');
 const port = config.port;
 const bodyParser = require('body-parser');
-const UserRouter = require('./routes/users/routes.config');
 const AuthRouter = require('./routes/auth/routes.config');
+const UserRouter = require('./routes/users/routes.config');
+const ProductsRouter = require('./routes/products/routes.config');
 
 
 app.use(function (request, response, next) {
@@ -24,6 +25,7 @@ app.use(bodyParser.json());
 
 AuthRouter.routes(app);
 UserRouter.routes(app);
+ProductsRouter.routes(app);
 
 
 app.listen(port, function () {
