@@ -4,7 +4,7 @@ const ValidationMiddleware = require('../../middlewares/validation/auth.validati
 
 exports.routesConfig = function (app) {
     app.post('/login', [
-        AuthenticationMiddleware.hasAuthValidFields,
+        AuthenticationMiddleware.hasValidFields,
         AuthenticationMiddleware.isPasswordAndUserMatch,
         AuthenticationController.login
     ]);
