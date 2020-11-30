@@ -8,7 +8,7 @@ const CUSTOMER = configData.role.CUSTOMER;
 const ADMIN = configData.role.ADMIN;
 const SELLER = configData.role.SELLER;
 
-exports.routesConfig = function (app) {
+exports.routes = function (app) {
     // registers a user
     app.post('/users', [
         AuthenticationMiddleware.hasValidFields,

@@ -5,11 +5,11 @@ const userSchema = new Schema({
     first_name : String,
     middle_name : String,
     last_name : String,
-    email_id : String,
+    email : String,
     password : String,
     dob : String,
     contact_number : String,
-    role_id : Number,
+    role : Number,
     address1 : String,
     address2 : String,
     city : String,
@@ -28,7 +28,8 @@ userSchema.set('toJSON', {
     virtuals: true
 });
 
-const User = mongoose.model('Users', userSchema);
+const User = mongoose.model('User', userSchema);
+
 
 exports.findByEmail = (email) => {
     return User.find({email: email});

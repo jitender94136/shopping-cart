@@ -1,4 +1,5 @@
-const UserModel = require('../../users/models/users.model');
+const UserModel = require('../../models/users/user.model');
+var emailValidator = require('email-validator');
 const crypto = require('crypto');
 
 exports.hasValidFields = (req, res, next) => {
@@ -6,6 +7,10 @@ exports.hasValidFields = (req, res, next) => {
     if (req.body) {
         if (!req.body.email) {
             errors.push('Missing email field');
+        }
+        let isValid = emailValidator.validate(req.body.email);
+        if(!isValid) {
+            errors.push('email is not valid');
         }
         if (!req.body.password) {
             errors.push('Missing password field');
@@ -33,7 +38,7 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
                     req.body = {
                         userId: user[0]._id,
                         email: user[0].email,
-                        role : user[0].role_id
+                        role : user[0].role
                     };
                     return next();
                 } else {

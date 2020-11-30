@@ -2,7 +2,7 @@ const AuthenticationMiddleware = require('../../middlewares/auth/authentication.
 const AuthenticationController = require('../../controllers/auth/authentication.controller');
 const ValidationMiddleware = require('../../middlewares/validation/auth.validation.middleware');
 
-exports.routesConfig = function (app) {
+exports.routes = function (app) {
     app.post('/login', [
         AuthenticationMiddleware.hasValidFields,
         AuthenticationMiddleware.isPasswordAndUserMatch,

@@ -2,6 +2,7 @@ const userModel = require('../../models/users/user.model');
 const sellerModel = require('../../models/users/seller/seller.model');
 const crypto = require('crypto');
 const ConfigModel = require('../../shared/config');
+const SELLER = ConfigModel.role.SELLER;
 
 exports.insert = (req, res) => {
     let salt = crypto.randomBytes(16).toString('base64');
@@ -16,7 +17,10 @@ exports.insert = (req, res) => {
 
 exports.insertSeller = (req, res) => {
     sellerModel.registerSeller(req.body).then((result) => {
-        res.status(201).send({id: result._id});
+        let sellerId = result._id;
+        userModel.patchUser(req.body.user_id, { role :  SELLER}).then((output) => {
+              res.status(201).send({id: sellerId});
+        });
     });
 };
 
@@ -54,11 +58,4 @@ exports.patchById = (req, res) => {
             res.status(204).send({});
         });
 
-};
-
-exports.removeById = (req, res) => {
-    userModel.removeById(req.params.userId)
-        .then((result)=>{
-            res.status(204).send({});
-        });
 };

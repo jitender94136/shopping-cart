@@ -1,4 +1,4 @@
-const jwtSecret = require('../../common/config/env.config.js').jwt_secret,
+const jwtSecret = require('../../shared/config').jwt_secret,
     jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 

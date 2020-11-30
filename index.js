@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
-const config = require('./shared/config/config.js');
+const config = require('./shared/config');
 const port = config.port;
 const bodyParser = require('body-parser');
-const use = require('./users/routes.config');
+const UserRouter = require('./routes/users/routes.config');
+const AuthRouter = require('./routes/auth/routes.config');
+
+
 app.use(function (request, response, next) {
     request.header('Access-Control-Allow-Origin', '*');
     request.header('Access-Control-Allow-Credentials', 'true');
@@ -18,6 +21,10 @@ app.use(function (request, response, next) {
 });
 
 app.use(bodyParser.json());
+
+AuthRouter.routes(app);
+UserRouter.routes(app);
+
 
 app.listen(port, function () {
     console.log('app listening at port %s', port);
