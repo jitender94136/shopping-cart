@@ -30,14 +30,12 @@ exports.findByCategory = (categoryId) => {
     return Product.find({category_id : categoryId});
 };
 
-exports.findById = (id) => {
-    return Product.findById(id)
-        .then((result) => {
-            result = result.toJSON();
-            delete result._id;
-            delete result.__v;
-            return result;
-        });
+exports.findById = async (id) => {
+    let result = await Product.findById(id)
+    result = result.toJSON();
+    delete result._id;
+    delete result.__v;
+    return result;
 };
 
 exports.createProduct = (data) => {

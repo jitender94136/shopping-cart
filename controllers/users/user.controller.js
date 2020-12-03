@@ -46,16 +46,14 @@ exports.getById = (req, res) => {
         });
 };
 
-exports.patchById = (req, res) => {
+exports.patchById = async (req, res) => {
     if (req.body.password) {
         let salt = crypto.randomBytes(16).toString('base64');
         let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
         req.body.password = salt + "$" + hash;
     }
 
-    userModel.patchUser(req.params.userId, req.body)
-        .then((result) => {
-            res.status(204).send({});
-        });
-
+    let result = await userModel.patchUser(req.params.userId, req.body);
+    console.log(result);
+    res.status(204).send({});
 };

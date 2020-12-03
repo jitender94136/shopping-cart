@@ -38,6 +38,9 @@ exports.findByEmail = (email) => {
 exports.findById = (id) => {
     return User.findById(id)
         .then((result) => {
+            if(!result) {
+                return "NO User Available by this userid."
+            }
             result = result.toJSON();
             delete result._id;
             delete result.__v;
@@ -66,9 +69,10 @@ exports.list = (perPage, page) => {
     });
 };
 
-exports.patchUser = (id, userData) => {
-    return User.findOneAndUpdate({
+exports.patchUser = async (id, userData) => {
+    let result = await User.findOneAndUpdate({
         _id: id
     }, userData);
+    return result;
 };
 

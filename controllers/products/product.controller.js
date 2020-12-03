@@ -49,10 +49,8 @@ exports.listCategories = (req, res) => {
 };
 
 exports.getProductById = (req, res) => {
-    ProductModel.findById(req.params.productId)
-        .then((result) => {
-            res.status(200).send(result);
-        });
+    let result = ProductModel.findById(req.params.productId);
+    res.status(200).send(result);
 };
 
 exports.getProductsByCategoryId = (req, res) => {

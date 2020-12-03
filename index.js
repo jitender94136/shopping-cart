@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const AuthRouter = require('./routes/auth/routes.config');
 const UserRouter = require('./routes/users/routes.config');
 const ProductsRouter = require('./routes/products/routes.config');
-
+const CartRouter = require('./routes/cart/routes.config');
 
 app.use(function (request, response, next) {
     request.header('Access-Control-Allow-Origin', '*');
@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 AuthRouter.routes(app);
 UserRouter.routes(app);
 ProductsRouter.routes(app);
-
+CartRouter.routes(app);
 
 app.listen(port, function () {
     console.log('app listening at port %s', port);
