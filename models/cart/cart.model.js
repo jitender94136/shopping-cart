@@ -81,25 +81,37 @@ createCart = async (data) => {
 
 //TODO: Transaction management pending
 exports.insertProductsInCart = async (cartId, data) => {
-    let productId = data.productId;
-    let product = await ProductModel.findById(productId);
-    let price = product.price;
-    let quantity = data.quantity;
-    let subTotal = price * quantity;
-    data.sub_total = subTotal;
-    data.created_on = new Date();
-    data.product_id = productId;
-    data.cart_id = cartId;
-    let oldCartDoc = await findCartById(cartId);
-    let existingTotal = oldCartDoc.total ? oldCartDoc.total : 0;
-    let newTotal = existingTotal + subTotal;
-    let cartDoc = await patchCartById(cartId,{
-        total : newTotal,
-        updated_on : new Date()
-    });
-    let cartProducts = new CartProductsModel(data);
-    await cartProducts.save();
-    return cartDoc._id;
+    try {
+        let productId = data.productId;
+        let cartProductDoc = await CartProductsModel.findOne({
+            cart_id : cartId,
+            product_id : productId
+        });
+        if(cartProductDoc && !cartProductDoc.err) {
+            return 0;
+        }
+        let product = await ProductModel.findById(productId);
+        let price = product.price;
+        let quantity = data.quantity;
+        let subTotal = price * quantity;
+        data.sub_total = subTotal;
+        data.created_on = new Date();
+        data.product_id = productId;
+        data.cart_id = cartId;
+        let oldCartDoc = await findCartById(cartId);
+        let existingTotal = oldCartDoc.total ? oldCartDoc.total : 0;
+        let newTotal = existingTotal + subTotal;
+        let cartDoc = await patchCartById(cartId,{
+            total : newTotal,
+            updated_on : new Date()
+        });
+        let cartProducts = new CartProductsModel(data);
+        await cartProducts.save();
+        return cartDoc._id;
+    } catch (err) {
+        return -1;
+    }
+
 };
 
 //TODO: transaction management is pending
@@ -173,6 +185,14 @@ patchCartById = async (id, data) => {
     return oldDoc;
 };
 
+getActiveCartForUser = async (userId) => {
+        let cartDoc = await CartModel.findOne({
+            created_by : userId,
+            active : 1
+        });
+        return cartDoc;
+};
+
 exports.patchCartById = patchCartById;
 exports.findCartById = findCartById;
 exports.getProductInCart = getProductInCart;
@@ -180,3 +200,4 @@ exports.updateProductInCart = updateProductInCart;
 exports.removeProductInCart = removeProductInCart;
 exports.getAllProductsInCart = getAllProductsInCart;
 exports.findCartByUserId = findCartByUserId;
+exports.getActiveCartForUser = getActiveCartForUser;

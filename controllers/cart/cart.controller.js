@@ -3,8 +3,15 @@ const CartModel = require('../../models/cart/cart.model')
 
 exports.insertProduct = async (req, res) => {
     let cartId = req.params.cartId;
-    await CartModel.insertProductsInCart(cartId, req.body);
-    res.status(201).send({});
+    let result = await CartModel.insertProductsInCart(cartId, req.body);
+    if(result == 0) {
+        res.status(200).send("Item already present in the Cart");
+    } else if(result == -1) {
+        res.status(500).send("Unable to process the request");
+    } else {
+        res.status(201).send({});
+    }
+
 };
 
 exports.updateProduct = async (req, res) => {
