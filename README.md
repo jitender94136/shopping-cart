@@ -168,4 +168,3 @@ Cart Abandonment Tracking Using GA
  
      * POST /orders/:cartId : place an order
      * GET /orders/:orderId : Get Order Detail
-     * GET /orders/:orderId/products : Get the list of products in the order
