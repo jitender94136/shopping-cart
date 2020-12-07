@@ -176,3 +176,11 @@ Id, order_id, product_id, product_name, product_price, quantity, sub_total, crea
  
      * POST /orders/:cartId : place an order
      * GET /orders/:orderId : Get Order Detail
+     
+ ### How to run at local
+ 
+ 1. download dependencies - node, npm and mongodb
+ 2. install node and mongodb using default configuration options
+ 3. run 'npm start' to start the project
+ 4. run 'npm test' to excute tests
+ 5. Use POSTMAN to test API
