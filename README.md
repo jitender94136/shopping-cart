@@ -7,9 +7,14 @@
 - **Platform:** node v14.15.1
 - **Framework**: express
 - **Database**: MongoDB with Mongoose
+- **Testing**: chai, mocha and istanbul
 
 ## Postman Collection URL
 - **https://documenter.getpostman.com/view/434712/TVmQcvFr**
+
+**Code coverage** -
+
+![alt text](./public/coverage.JPG)
 
 # MongoDB Conceptual Design
 ## Collections:
