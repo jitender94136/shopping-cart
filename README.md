@@ -102,11 +102,11 @@ Id, order_id, product_id, product_name, product_price, quantity, sub_total, crea
 
 
 ### Future Inclusions:
-Payment Methods Provided By Seller
-Payment Method Used By Customer
-Shipment Tracking
-Use of Coupons while placing order
-Cart Abandonment Tracking Using GA
+- **Payment Methods Provided By Seller**
+- **Payment Method Used By Customer**
+- **Shipment Tracking**
+- **Use of Coupons while placing order**
+- **Cart Abandonment Tracking Using GA**
 
 
 

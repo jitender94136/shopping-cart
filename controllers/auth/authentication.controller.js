@@ -26,12 +26,3 @@ exports.refresh_token = (req, res) => {
         res.status(500).send({errors: err});
     }
 };
-
-// TODO: think solutions about logout user functionality
-exports.logout = (req, res) => {
-    try {
-
-    } catch (err) {
-        res.status(500).send({errors: err});
-    }
-};

@@ -33,3 +33,5 @@ OrderRouter.routes(app);
 app.listen(port, function () {
     console.log('app listening at port %s', port);
 });
+
+module.exports = app;

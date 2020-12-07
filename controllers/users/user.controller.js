@@ -54,6 +54,5 @@ exports.patchById = async (req, res) => {
     }
 
     let result = await userModel.patchUser(req.params.userId, req.body);
-    console.log(result);
     res.status(204).send({});
 };

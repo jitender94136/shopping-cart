@@ -15,8 +15,4 @@ exports.routes = function (app) {
         ValidationMiddleware.validRefreshNeeded,
         AuthenticationController.login
     ]);
-
-    app.post('/logout', [
-        AuthenticationController.logout
-    ]);
 };
