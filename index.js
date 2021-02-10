@@ -1,28 +1,24 @@
-const express = require('express');
-const app = express();
-const config = require('./shared/config');
-const port = config.port;
-const bodyParser = require('body-parser');
-const AuthRouter = require('./routes/auth/routes.config');
-const UserRouter = require('./routes/users/routes.config');
-const ProductsRouter = require('./routes/products/routes.config');
-const CartRouter = require('./routes/cart/routes.config');
-const OrderRouter = require('./routes/order/routes.config');
+require('dotenv').config();
 
-app.use(function (request, response, next) {
-    request.header('Access-Control-Allow-Origin', '*');
-    request.header('Access-Control-Allow-Credentials', 'true');
-    request.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-    request.header('Access-Control-Expose-Headers', 'Content-Length');
-    request.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
-    if (request.method === 'OPTIONS') {
-        return response.sendStatus(200);
-    } else {
-        return next();
-    }
-});
+const express = require('express');
+
+const app = express();
+const morgan = require('morgan');
+
+require('./helpers/init_mongodb');
+
+const port = process.env.PORT;
+const bodyParser = require('body-parser');
+const AuthRouter = require('./routes/authroute');
+const UserRouter = require('./routes/userroute');
+const ProductsRouter = require('./routes/productroute');
+const CartRouter = require('./routes/cartroute');
+const OrderRouter = require('./routes/orderroute');
+const { error } = require('./helpers/responseApi');
 
 app.use(bodyParser.json());
+
+app.use(morgan('dev'));
 
 AuthRouter.routes(app);
 UserRouter.routes(app);
@@ -30,8 +26,18 @@ ProductsRouter.routes(app);
 CartRouter.routes(app);
 OrderRouter.routes(app);
 
-app.listen(port, function () {
-    console.log('app listening at port %s', port);
+app.use((req, res, next) => {
+  next(error('No route exists', 404));
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.log('index.js', err);
+  res.send(err);
+});
+
+app.listen(port, () => {
+  console.log('app listening at port %s', port);
 });
 
 module.exports = app;
