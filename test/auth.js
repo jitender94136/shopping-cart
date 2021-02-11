@@ -8,13 +8,11 @@ const mongoose = require('mongoose');
 const application = require('../index');
 const UserModel = require('../models/user');
 
-
-
 chai.should();
 chai.use(chaiHttp);
 
 describe('POST /login', () => {
-  it('A valid jwt token', (done) => {
+  it('A valid jwt access token', (done) => {
     const userData = {
       email: 'jitender.singh@ziwo.com',
       password: 'test',
@@ -38,7 +36,8 @@ describe('POST /login', () => {
           password: 'test',
         })
         .end((err, res) => {
-          res.should.have.status(404);
+          res.should.have.status(200);
+          res.body.should.be.a('object');
           done();
         });
     });

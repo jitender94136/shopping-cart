@@ -31,7 +31,7 @@ exports.findByCategory = (categoryId) => Product.find({ category_id: categoryId 
 
 exports.findById = async (id) => {
   let result = await Product.findById(id, {
-    _id: 0, __v: 0,
+    __v: 0,
   });
   result = result.toJSON();
   return result;

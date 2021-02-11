@@ -13,10 +13,9 @@ exports.placeOrder = async (req, res, next) => {
   if (result === -1) {
     return next(error('Unable to serve request at this point', 500));
   }
-  return next(success({results: { order_id: result }, code: 201 }));
+  return next(success({ results: { order_id: result }, code: 201 }));
 };
 
-// TODO: get product details from referenced product collection
 exports.list = async (req, res, next) => {
   try {
     const { orderId } = req.params;

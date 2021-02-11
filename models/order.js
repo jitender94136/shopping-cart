@@ -81,18 +81,18 @@ exports.placeOrder = async (userId) => {
     const entries = Object.entries(productDocs);
     for (let i = 0; i < entries.length; i += 1) {
       let entry = entries[i];
-      // eslint-disable-next-line no-underscore-dangle
-      entry = productDocs[entry]._doc;
+      // eslint-disable-next-line prefer-destructuring
+      entry = entry[1];
       const orderItemData = {};
       const productId = entry.product_id;
       // eslint-disable-next-line no-await-in-loop
       const productDetails = await ProductModel.findById(productId);
       orderItemData.order_id = orderId;
       orderItemData.product_id = productId;
-      orderItemData.price = productDetails.price;
+      orderItemData.price = parseInt(productDetails.price, 10);
       orderItemData.product_name = productDetails.title;
-      orderItemData.quantity = entry.quantity;
-      orderItemData.sub_total = entry.sub_total;
+      orderItemData.quantity = parseInt(entry.quantity, 10);
+      orderItemData.sub_total = parseInt(entry.sub_total, 10);
       orderItemData.created_on = new Date();
       const orderItemEntry = new OrderProductsModel(orderItemData);
       // eslint-disable-next-line no-await-in-loop
@@ -100,6 +100,7 @@ exports.placeOrder = async (userId) => {
     }
     return orderId;
   } catch (err) {
+    console.log(err);
     return -1;
   }
 };

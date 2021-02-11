@@ -42,23 +42,18 @@ const CartProductsModel = mongoose.model('CartProducts', cartProductsSchema);
 const ProductModel = mongoose.model('Product');
 
 async function findCartById(cartId) {
-  let result = await CartModel.findOne({ _id: cartId }, { _id: 0, __v: 0 });
+  let result = await CartModel.findOne({ _id: cartId }, { __v: 0 });
   result = result.toJSON();
   return result;
 }
 
 // only for authenticated customers
 async function createCart(data) {
-  try {
-    const cart = new CartModel(data);
-    cart.created_on = new Date();
-    cart.active = 1;
-    const resultDoc = await cart.save();
-    return resultDoc;
-  } catch (err) {
-    console.log(err);
-    return {};
-  }
+  const cart = new CartModel(data);
+  cart.created_on = new Date();
+  cart.active = 1;
+  const resultDoc = await cart.save();
+  return resultDoc;
 }
 
 async function patchCartById(id, data) {
@@ -99,15 +94,17 @@ exports.insertProductsInCart = async (cartId, data) => {
       return 0;
     }
     const product = await ProductModel.findById(productId);
-    const { price } = product;
-    const { quantity } = productData;
+    let { price } = product;
+    price = parseInt(price, 10);
+    let { quantity } = productData;
+    quantity = parseInt(quantity, 10);
     const subTotal = price * quantity;
     productData.sub_total = subTotal;
     productData.created_on = new Date();
     productData.product_id = productId;
     productData.cart_id = cartId;
     const oldCartDoc = await findCartById(cartId);
-    const existingTotal = oldCartDoc.total ? oldCartDoc.total : 0;
+    const existingTotal = parseInt(oldCartDoc.total, 10);
     const newTotal = existingTotal + subTotal;
     const cartDoc = await patchCartById(cartId, {
       total: newTotal,
@@ -117,6 +114,7 @@ exports.insertProductsInCart = async (cartId, data) => {
     await cartProducts.save();
     return cartDoc.id;
   } catch (err) {
+    console.log(err);
     return -1;
   }
 };
@@ -135,9 +133,11 @@ async function getProductInCart(cartId, productId) {
 exports.getProductInCart = getProductInCart;
 
 exports.updateProductInCart = async (cartId, productId, data) => {
-  const { quantity } = parseInt(data, 10);
+  let { quantity } = data;
+  quantity = parseInt(quantity, 10);
   const product = await ProductModel.findById(productId);
-  const { price } = product;
+  let { price } = product;
+  price = parseInt(price, 10);
   const newSubTotal = quantity * price;
   const updatedData = {
     quantity,
@@ -147,9 +147,11 @@ exports.updateProductInCart = async (cartId, productId, data) => {
     cart_id: cartId,
     product_id: productId,
   }, updatedData);
-  const oldSubTotal = oldDoc.sub_total;
+  let oldSubTotal = oldDoc.sub_total;
+  oldSubTotal = parseInt(oldSubTotal, 10);
   const cart = await findCartById(cartId);
   let totalAmount = cart.total;
+  totalAmount = parseInt(totalAmount, 10);
   totalAmount -= oldSubTotal;
   totalAmount += newSubTotal;
   const oldCartDoc = await patchCartById(cartId, {
@@ -163,8 +165,10 @@ exports.removeProductInCart = async (cartId, productId) => {
   // reduce product subtotal from actual cart
   const cartDoc = await findCartById(cartId);
   const productDoc = await getProductInCart(cartId, productId);
-  const subTotal = productDoc.sub_total;
-  const updatedTotal = cartDoc.total - subTotal;
+  let subTotal = productDoc.sub_total;
+  subTotal = parseInt(subTotal, 10);
+  const cartTotal = cartDoc.total;
+  const updatedTotal = cartTotal - subTotal;
   await CartProductsModel.deleteOne({
     cart_id: cartId,
     product_id: productId,
